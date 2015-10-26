@@ -8,33 +8,31 @@ import java.time.LocalDateTime;
 public class NotePrimitive {
     private String _data;
     private LocalDateTime _cdate;
-    private LocalDateTime _mdate;
     private int _id;
 
     NotePrimitive(String s, int ident) {
         _data = s;
         _cdate = LocalDateTime.now();
-        _mdate = LocalDateTime.now();
         _id = ident;
     }
 
-    String GetData() { return _data; }
-    LocalDateTime GetCDate() {return _cdate; }
-    LocalDateTime GetMDate()
-    {
-        return _mdate;
+    NotePrimitive(int id, LocalDateTime date, String s) {
+        _data = s;
+        _cdate = date;
+        _id = id;
     }
-    void SetData(String ns)
+
+    public String GetData() { return _data; }
+    public LocalDateTime GetCDate() {return _cdate; }
+    public void SetData(String ns)
     {
         _data = ns;
     }
-    void SetCDate(LocalDateTime nd)
+    public void SetCDate(LocalDateTime nd)
     {
         _cdate = nd;
     }
-    void SetMDate(LocalDateTime nd) { _mdate = nd; }
-
-    int GetID() {
+    public int GetID() {
         return _id;
     }
 
@@ -45,7 +43,6 @@ public class NotePrimitive {
         for (int i = pos; i < pos + newData.length(); i++)
             arr[i] = newData.charAt(i - pos);
         _data = new String(arr);
-        _mdate = LocalDateTime.now();
     }
 
     void delSubstr(int beg, int end) {
@@ -58,7 +55,6 @@ public class NotePrimitive {
             if ((i<beg) && (i>end))
                 _data+=ss.charAt(i);
 
-        _mdate = LocalDateTime.now();
     }
 }
 

@@ -21,7 +21,6 @@ public class Server {
     Server(int port)
     {
         _port = port;
-
     }
 
     public void start() {
@@ -40,5 +39,63 @@ public class Server {
 
     }
 
+    public void Login() {
 
+    }
+
+    public void Logout() {
+
+    }
+
+    public void CreateUser() {
+
+    }
+
+    public void DeleteUser() {
+
+    }
+
+    public void ChangeUser() {
+
+    }
+
+    public void CreateRequest() {
+
+    }
+
+    public void ChangeRequest() {
+
+    }
+
+    public void DeleteRequest() {
+
+    }
+
+    public void CreateTag() {
+
+    }
+
+    public void DeleteTag() {
+
+    }
+
+    public void AddTagToRequest() {
+
+    }
+
+    public void GetRequestListByTags() {
+
+    }
+
+    public void GetTagList() {
+
+    }
+
+    public void HandleRequest() {
+
+    }
+
+    public void GetNoteTitleList() {
+
+    }
 }

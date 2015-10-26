@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ServerDaemon {
     private ArrayList<Server> _serverThreads;
     private int _lastPort;
+    public static SecurityHelper clSH;
 
     ServerDaemon() {
         _serverThreads.clear();
