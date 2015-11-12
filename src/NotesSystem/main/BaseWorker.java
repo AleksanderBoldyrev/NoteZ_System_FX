@@ -26,9 +26,17 @@ public class BaseWorker {
         _users = new ArrayList<User>();
         _notes = new ArrayList<Note>();
         _tags = new ArrayList<Tag>();
-        LoadNotes(path_3);
-        LoadUsers(path_2);
-        LoadTags(path_1);
+    }
+
+    public int CheckUser(String log, String pass) {
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetName().equals(log))
+                    if (_users.get(i).GetPass().equals(pass))
+                        return _users.get(i).GetId();
+            }
+        }
+        return -1;
     }
 
     private void LoadUsers(String fileName) {
@@ -131,6 +139,7 @@ public class BaseWorker {
         ArrayList<Integer> buffTagsId = new ArrayList<Integer>();
         ArrayList<NotePrimitive> buffNoteVers = new ArrayList<NotePrimitive>();
         String buffText = new String();
+        String buffTitle = new String();
         StringBuilder lBuf = new StringBuilder();
         int readOfPrimitivesCount = 0;
         LocalDateTime buffDate = LocalDateTime.now();
@@ -145,11 +154,15 @@ public class BaseWorker {
                         else
                             buffId = 0;
                         break;
-                    case 1:         //*** Read number of versions. ***
+                    case 1:
+                        stage++;
+                        buffTitle = buff.toString();
+                        break;
+                    case 2:         //*** Read number of versions. ***
                         buffVersNum = Integer.parseInt(buff.toString());
                         stage++;
                         break;
-                    case 2:         //*** Read note's tags id list. ***
+                    case 3:         //*** Read note's tags id list. ***
                         stage++;
                         //lBuf.replace(0, lBuf.length() - 1, "");
                         for (int j = 0; j < buff.length(); j++) {
@@ -161,11 +174,11 @@ public class BaseWorker {
                             }
                         }
                         break;
-                    case 3:         //*** Creation date of Note Primitive. ***
+                    case 4:         //*** Creation date of Note Primitive. ***
                         stage++;
                         buffDate = LocalDateTime.parse(buff);
                         break;
-                    case 4:         //*** Text of Note Primitive. ***
+                    case 5:         //*** Text of Note Primitive. ***
                         buffNotePrimData = buff.toString();
                         buffNoteVers.add(new NotePrimitive(readOfPrimitivesCount, buffDate, buffNotePrimData));
 
@@ -175,7 +188,7 @@ public class BaseWorker {
                         }
                         else {
                             stage = 0; //end of reading note primitives
-                            _notes.add(new Note(buffId, buffTagsId, buffNoteVers));
+                            _notes.add(new Note(buffId, buffTagsId, buffNoteVers, buffTitle));
                             buffTagsId.clear();
                             buffNoteVers.clear();
                             readOfPrimitivesCount=0;
@@ -254,7 +267,7 @@ public class BaseWorker {
                 out.print(sep);
                 int t = _users.get(i).GetNotesCount();
                 for (int j = 0; j < t; j++) {
-                    out.print(_users.get(i).GetNotesByPos(j));
+                    out.print(_users.get(i).GetNoteByPos(j));
                     out.print(sepId);
                 }
                 out.print(sep);
@@ -275,6 +288,8 @@ public class BaseWorker {
 
             for (int i = 0; i < _notes.size(); i++) {
                 out.print(_notes.get(i).GetId());
+                out.print(sep);
+                out.print(_notes.get(i).GetTitle());
                 out.print(sep);
                 int vcount = _notes.get(i).GetVersionsCount();
                 out.print(vcount);
@@ -320,44 +335,177 @@ public class BaseWorker {
         }
     }
 
-    public void SaveData()
-    {
+    public void SaveData() {
         SaveNotes(path_3);
         SaveUsers(path_2);
         SaveTags(path_1);
     }
 
-    public void SetNote(Note dat, int id)
-    {
-
+    private boolean VerifyUserId(int id) {
+        if (id<_users.size() && id>0)
+            return true;
+        return false;
     }
 
-    public void ReadNote() {
-
+    private boolean VerifyTagId(int id)    {
+        if (id<_tags.size() && id>0)
+            return true;
+        return false;
     }
 
-    public void AddNote() {
-
+    private boolean VerifyNoteId(int id)    {
+        if (id<_notes.size() && id>0)
+            return true;
+        return false;
     }
 
-    public void DeleteNote() {
-
+    public void SetNoteCaption(int id, String data) {
+        if (VerifyNoteId(id)) {
+            _notes.get(id).SetTitle(data);
+        }
     }
 
-    public void SetUser(User u, int id) {
-
+    public void SetNoteTags(int id, ArrayList<Integer> t) {
+        if (VerifyNoteId(id)) {
+            _notes.get(id).SetTags(t);
+        }
     }
 
-    public void ReadUser() {
-
+    public void RemoveNoteVer(int id, int ver) {
+        if (VerifyNoteId(id))
+            _notes.get(id).DelVersion(ver);
     }
 
-    public void AddUser() {
-
+    public void SetUserName(int id, String data) {
+        if (VerifyUserId(id))
+            _users.get(id).SetLogin(data);
     }
 
-    public void DeleteUser() {
+    public void SetUserPass(int id, String data) {
+        if (VerifyUserId(id))
+            _users.get(id).SetPass(data);
+    }
 
+    public int GetTagByName(String name) {
+        int res = -1;
+        if (_tags.size()>0)
+            for (int i=0; i<_tags.size(); i++)
+                if (_tags.get(i).GetStrData().equals(name))
+                    res = i;
+
+        return res;
+    }
+
+    public void AddTag(String t) {
+        if (GetTagByName(t) >= 0) {
+            int m = 0;
+            if (_tags.size() > 0) m = _tags.get(0).GetId() + 1;
+            Tag t1 = new Tag(m, t);
+            _tags.add(t1);
+        }
+        //File file = new File(fileName);
+        /*try
+        {
+            if(!file.exists())
+                file.createNewFile();
+            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+
+            for (int i = 0; i < _tags.size(); i++) {
+                out.print(_tags.get(i).GetId());
+                out.print(sep);
+                out.print(_tags.get(i).GetStrData());
+                out.print(sep);
+            }
+            out.close();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }*/
+    }
+
+    public void AddNote(int userId, ArrayList<Integer> _tags, String _data, String title) {
+        if (VerifyUserId(userId)) {
+            int m = 0;
+            if (_notes.size() > 0) m = _notes.get(0).GetId() + 1;
+            NotePrimitive np = new NotePrimitive(0, LocalDateTime.now(), _data);
+            ArrayList<NotePrimitive> al = new ArrayList<NotePrimitive>();
+            al.add(np);
+            Note n1 = new Note(m, _tags, al, title);
+            _notes.add(n1);
+            _users.get(userId).AddNote(m);
+        }
+        //File file = new File(fileName);
+        /*try
+        {
+            if(!file.exists())
+                file.createNewFile();
+            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+
+            out.print(_notes.get(i).GetId());
+            out.print(sep);
+            int vcount = _notes.get(i).GetVersionsCount();
+            out.print(vcount);
+            out.print(sep);
+            int t = _notes.get(i).GetVersionsCount();
+            for (int j = 0; j < t; j++) {
+                out.print(_notes.get(i).GetTagById(j));
+                out.print(sepId);
+            }
+            out.print(sep);
+            for (int j = 0; j < vcount; j++)
+            {
+                NotePrimitive nt = _notes.get(i).GetNoteByPos(j);
+                out.print(nt.GetCDate().toString());
+                out.print(sep);
+                out.print(nt.GetData());
+                out.print(sep);
+            }
+            out.close();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }*/
+    }
+
+    public void AddUser(String _log, String _pass) {
+        if (CheckUser(_log, _pass) >= 0) {
+            int m = 0;
+            if (_users.size() > 0) m = _users.get(0).GetId() + 1;
+            User u1 = new User(m, _log, _pass, new ArrayList<Integer>());
+            _users.add(u1);
+        }
+        //File file = new File(fileName);
+        /*try
+        {
+            if(!file.exists())
+                file.createNewFile();
+            PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+            out.print(_id);
+            out.print(sep);
+            out.print(_log);
+            out.print(sep);
+            out.print(_pass);
+            out.print(sep);
+            for (int i = 0; i < _notesId.size(); i++) {
+                out.print(_notesId.get(i));
+                out.print(sep);
+            }
+            //out.print(sep);
+            out.close();
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }*/
+    }
+
+    public void DeleteUser(int userId) {
+        if (VerifyUserId(userId)) {
+            //Remove notes
+            if (_users.get(userId).GetNotesCount()>0) {
+                ArrayList<Integer> un = _users.get(userId).GetNotes();
+                for (int j = 0; j < _notes.size(); j++) {
+                    if (un.contains(_notes.get(j).GetId()))
+                        _notes.remove(j);
+                }
+            }
+        }
     }
 
     public void CreateBackup() {
@@ -368,27 +516,132 @@ public class BaseWorker {
 
     }
 
-    public void PushBaseToDisk() {
-
-    }
-
     public void Initialise() {
-
+        LoadNotes(path_3);
+        LoadUsers(path_2);
+        LoadTags(path_1);
     }
 
-    public void DeleteTag() {
-
+    public void DeleteTagById(int id) {
+        if (VerifyTagId(id)) {
+            if (_tags.size() > 0)
+                for (int i = 0; i < _tags.size(); i++)
+                    if (_tags.get(i).GetId() == id)
+                        _tags.remove(i);
+        }
     }
 
-    public void AddTag() {
+    public void DeleteTagByName(String name) {
+        if (_tags.size() > 0)
+            for (int i = 0; i < _tags.size(); i++)
+                if (_tags.get(i).GetStrData() == name)
+                    _tags.remove(i);
+    }
 
+    public int GetNotesCountByUser(int userId) {
+        int res = 0;
+        if (_users.size() > 0)
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetId() == userId) {
+                    res = _users.get(i).GetNotesCount();
+                    break;
+                }
+            }
+        return res;
+    }
+
+    public ArrayList<String> GetNotesTitles(int userId) {
+        ArrayList<String> res = new ArrayList<String>();
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetId() == userId) {
+                    ArrayList<Integer> al = _users.get(i).GetNotes();
+                    for (int k = 0; k < _notes.size(); k++) {
+                        if (al.contains(_notes.get(k).GetId()))
+                            res.add(_notes.get(k).GetTitle());
+                    }
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
+    public ArrayList<Integer> GetNotesByUserId(int userId) {
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetId() == userId) {
+                   return _users.get(i).GetNotes();
+                }
+            }
+        }
+        return res;
+    }
+
+    public String GetNoteVerById(int userId, int noteId, int verId) {
+        String res = new String();
+        ArrayList<Integer> n = new ArrayList<Integer>();
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetId() == userId) {
+                    n = _users.get(i).GetNotes();
+                    if (n.size() > 0)
+                        for (int j = 0; j < n.size(); j++) {
+                            if ((_notes.get(n.get(j)).GetId() == noteId) && (_notes.get(n.get(j)).GetVersionsCount() > 0)) {
+                                for (int m = 0; m < _notes.get(n.get(j)).GetVersionsCount(); m++) {
+                                    if (_notes.get(n.get(j)).GetNoteByPos(m).GetID() == verId) {
+                                        res = _notes.get(n.get(j)).GetNoteByPos(m).GetData();
+                                    }
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                }
+                break;
+            }
+        }
+        return res;
+    }
+
+    public String GetNoteVerDateById(int userId, int noteId, int verId) {
+        String res = new String(LocalDateTime.now().toString());
+        ArrayList<Integer> n = new ArrayList<Integer>();
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetId() == userId) {
+                    n = _users.get(i).GetNotes();
+                    if (n.size() > 0) {
+                        for (int j = 0; j < n.size(); j++) {
+                            if ((_notes.get(n.get(j)).GetId() == noteId) && (_notes.get(n.get(j)).GetVersionsCount() > 0)) {
+                                for (int m = 0; m < _notes.get(n.get(j)).GetVersionsCount(); m++) {
+                                    if (_notes.get(n.get(j)).GetNoteByPos(m).GetID() == verId) {
+                                        res = _notes.get(n.get(j)).GetNoteByPos(m).GetCDate().toString();
+                                    }
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+                break;
+            }
+        }
+        return res;
     }
 
     public void DeleteUnusedTags() {
-
+        /**
+         * TODO
+         */
     }
 
     public void Verify() {
-
+        /**
+         * TODO
+         */
     }
 }

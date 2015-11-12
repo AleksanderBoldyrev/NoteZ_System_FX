@@ -1,29 +1,57 @@
 package NotesSystem.main;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 /**
  * Created by Sasha on 08.10.2015.
  */
-public class ServerDaemon {
+public class ServerDaemon extends Thread{
     private ArrayList<Server> _serverThreads;
-    private int _lastPort;
-    public static SecurityHelper clSH;
+    private int _port;
+    private ServerSocket _ssocket;
+    //public final static SecurityHelper clSH = new SecurityHelper();
 
-    ServerDaemon() {
+    ServerDaemon(int port) {
         _serverThreads.clear();
-        _lastPort = 10000;
+        _port = port;
+        try {
+            _ssocket = new ServerSocket(_port);
+        } catch (IOException e) {
+            System.out.println("Couldn't create service.");
+        }
     }
 
-    private void CreateThread(int port)
+    public void run()
     {
-        /*TODO = Check if port is busy*/
-        Server s = new Server(_lastPort);
-        _serverThreads.add(s);
-        _lastPort+=16;
+        Socket s = null;
+        while (true) {
+
+            try {
+                s = _ssocket.accept();
+                Server serv = new Server(s);
+                _serverThreads.add(serv);
+                Thread t = new Thread(serv);
+                t.start();
+            } catch (IOException e) {
+                //e.printStackTrace();
+                System.out.println("Couldn't create a new server thread.");
+                break;
+            }
+        }
+
+        try {
+            s.close();
+            _ssocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public void start() {
+    /*public void start() {
 
     }
 
@@ -37,5 +65,5 @@ public class ServerDaemon {
 
     public void resume() {
 
-    }
+    }*/
 }

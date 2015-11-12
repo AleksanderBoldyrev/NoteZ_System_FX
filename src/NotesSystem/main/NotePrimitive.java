@@ -16,8 +16,8 @@ public class NotePrimitive {
         _id = ident;
     }
 
-    NotePrimitive(int id, LocalDateTime date, String s) {
-        _data = s;
+    NotePrimitive(int id, LocalDateTime date, String data) {
+        _data = data;
         _cdate = date;
         _id = id;
     }
@@ -54,7 +54,6 @@ public class NotePrimitive {
         for (int i = 0; i<ss.length(); i++)
             if ((i<beg) && (i>end))
                 _data+=ss.charAt(i);
-
     }
 }
 

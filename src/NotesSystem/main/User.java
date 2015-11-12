@@ -36,9 +36,30 @@ public class User {
     public int GetId() {
         return this._u_id;
     }
-    public void SetId(int id) { this._u_id = id; }
+    //public void SetId(int id) { this._u_id = id; }
     public String GetName() { return this._login; }
     public String GetPass() { return this._pass; }
     public int GetNotesCount() { return this._notes.size(); }
-    public int GetNotesByPos(int i) { return this._notes.get(i); }
+    public int GetNoteByPos(int i) { return this._notes.get(i); }
+    public ArrayList<Integer> GetNotes() {return _notes; }
+
+    public void SetLogin(String name) {
+        _login = name;
+    }
+
+    public void SetPass(String p) {
+        _pass = p;
+    }
+
+    public void RemoveNote(int noteId)  {
+        if (_notes.size()>0)
+            for (int i=0; i<_notes.size(); i++)
+                if (_notes.get(i)==noteId) {
+                    _notes.remove(i);
+                }
+    }
+
+    public void AddNote(int noteId)  {
+        _notes.add(noteId);
+    }
 }

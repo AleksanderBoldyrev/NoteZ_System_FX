@@ -9,12 +9,13 @@ import java.util.ArrayList;
  */
 public class Note {
     private int _id;
+    private String _title;
     private ArrayList<NotePrimitive> _note;
     private LocalDateTime _n_cdate;
     private LocalDateTime _n_mdate;
     private ArrayList<Integer> _tags;
 
-    Note (String data, int id) {
+    /*Note (String data, int id) {
         _note = new ArrayList<NotePrimitive>();
         _note.clear();
         NotePrimitive n = new NotePrimitive(data, id*10000);
@@ -22,12 +23,13 @@ public class Note {
         _id = id;
         _n_cdate = LocalDateTime.now();
         _n_mdate = LocalDateTime.now();
-    }
+    }*/
 
-    Note (int id, ArrayList<Integer> tags, ArrayList<NotePrimitive> notes) {
+    public Note (int id, ArrayList<Integer> tags, ArrayList<NotePrimitive> notes, String title) {
         _note = new ArrayList<NotePrimitive>();
         _note.clear();
         _id = id;
+        _title = title;
         //System.out.print(id + "|");
         _tags = new ArrayList<Integer>();
         _tags.clear();
@@ -53,7 +55,7 @@ public class Note {
         //System.out.println(_n_cdate + "|" + _n_mdate + "|");
     }
 
-    NotePrimitive getNote() {
+    public NotePrimitive getNote() {
         if (_id > _note.size()) _id = 0;
         return _note.get(0);
     }
@@ -95,11 +97,11 @@ public class Note {
         return _note.get(_note.size()-1).GetID();
     }*/
 
-    int GetVersionsCount() {
+    public int GetVersionsCount() {
         return _note.size();
     }
 
-    NotePrimitive GetNoteByPos(int pos) {
+    public NotePrimitive GetNoteByPos(int pos) {
         if (pos>(_note.size()-1))
             pos = _note.size()-1;
         if (pos<0)
@@ -108,21 +110,47 @@ public class Note {
     }
 
 
-    int GetId() {
+    public int GetId() {
         return _id;
     }
 
-    int GetTagsCount() {
+    public String GetTitle() {return _title; }
+
+    public  int GetTagsCount() {
         return _tags.size();
     }
 
-    int GetTagById(int id) {
+    public int GetTagById(int id) {
         if (id>(_tags.size()-1))
             id = _tags.size()-1;
         if (id<0)
             id = 0;
 
         return _tags.get(id);
+    }
+
+    public void SetTitle(String data)
+    {
+        _title = data;
+    }
+
+    public void SetTags(ArrayList<Integer> _tagIds)
+    {
+        _tags = _tagIds;
+    }
+
+    public void DelVersion(int _targetId)
+    {
+        if (_note.size()>1)
+           for (int i=0; i < _note.size(); i++)
+           {
+               if (_note.get(i).GetID()==_targetId)
+                   _note.remove(i);
+           }
+    }
+    public void AddVersion(LocalDateTime date, String data)
+    {
+        NotePrimitive np = new NotePrimitive(_note.get(0).GetID()+1, date, data);
     }
 
     /*void DelNote(int ident) {
