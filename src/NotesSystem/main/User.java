@@ -12,7 +12,7 @@ public class User {
     private int _u_id;
     private ArrayList<Integer> _notes;
 
-    User(int id, String buffLogin, String buffPass, ArrayList<Integer> notes) {
+    public User(int id, String buffLogin, String buffPass, ArrayList<Integer> notes) {
         _u_id = id;
         System.out.print(_u_id + "|");
         _login = buffLogin;
@@ -46,10 +46,11 @@ public class User {
     public void SetLogin(String name) {
         _login = name;
     }
-
+    public void SetId(int _id) { _u_id = _id; }
     public void SetPass(String p) {
         _pass = p;
     }
+    public void SetNoteList(ArrayList<Integer> _n) {_notes  = _n; }
 
     public void RemoveNote(int noteId)  {
         if (_notes.size()>0)

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="qtjambi-src">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://F:/qtjambi-community-4.8.7-win64-msvc2013/qtjambi-src.jar!/" />
+    </SOURCES>
+  </library>
+</component>

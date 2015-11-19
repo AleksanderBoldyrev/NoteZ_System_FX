@@ -10,13 +10,19 @@ public class NotePrimitive {
     private LocalDateTime _cdate;
     private int _id;
 
-    NotePrimitive(String s, int ident) {
+    public NotePrimitive() {
+        _data = "";
+        _cdate = LocalDateTime.now();
+        _id = 0;
+    }
+
+    public NotePrimitive(String s, int ident) {
         _data = s;
         _cdate = LocalDateTime.now();
         _id = ident;
     }
 
-    NotePrimitive(int id, LocalDateTime date, String data) {
+    public NotePrimitive(int id, LocalDateTime date, String data) {
         _data = data;
         _cdate = date;
         _id = id;
@@ -36,7 +42,7 @@ public class NotePrimitive {
         return _id;
     }
 
-    void ChangeNote(int pos, String newData) {
+    public void ChangeNote(int pos, String newData) {
         for (int i = 0; i < (pos+newData.length()-_data.length()); i++)
             _data+=" ";
         char arr[] = _data.toCharArray();
@@ -45,7 +51,7 @@ public class NotePrimitive {
         _data = new String(arr);
     }
 
-    void delSubstr(int beg, int end) {
+    public void delSubstr(int beg, int end) {
         int swapper = (beg > end) ? beg : end;
         beg = (beg > end) ? end : beg;
         end = swapper;

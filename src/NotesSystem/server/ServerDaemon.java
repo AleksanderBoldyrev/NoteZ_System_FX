@@ -1,4 +1,6 @@
-package NotesSystem.main;
+package NotesSystem.server;
+
+import NotesSystem.server.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,6 +17,7 @@ public class ServerDaemon extends Thread{
     //public final static SecurityHelper clSH = new SecurityHelper();
 
     ServerDaemon(int port) {
+        _serverThreads = new ArrayList<Server>();
         _serverThreads.clear();
         _port = port;
         try {

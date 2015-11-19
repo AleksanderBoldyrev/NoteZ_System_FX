@@ -1,89 +1,114 @@
 package NotesSystem.main;
 
+import sun.nio.cs.ext.IBM037;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 /**
  * Created by Alex on 04.11.2015.
  */
 public class RequestsParser {
-    private int _userId;
-    private String _userName;
-    private String _pass;
-    private int _tagId;
-    private String _taggData;
 
-    public void SetUserId(int id) {
-        _userId = id;
+
+   /* public String Build(Tag t) {
+        String res = new String();
+        return res;
     }
 
-    public String Parse(String str) {
-        String s = new String();
+    public String Build(User u) {
+        String res = new String();
+        return res;
+    }
 
-        int operId = -1;
-        ///
-        byte stage = 0;
+    public String Build(Note n) {
+        String res = new String();
+        return res;
+    }
+    public String Build(NotePrimitive np) {
+        String res = new String();
+        return res;
+    }*/
+
+    public String Build(ArrayList ar, int oId) {
+        String res = new String();
+        res+=oId;
+        res+=CommonData.SEP;
+        for (int i=0; i<ar.size(); i++){
+            res+=ar.get(i);
+            res+=CommonData.SEP;
+        }
+
+        return res;
+    }
+
+    /*public String Build(int oId, ArrayList<Integer> ar) {
+        String res = new String();
+        return res;
+    }*/
+
+    public String Build(NotePrimitive np, int oId) {
+        String res = new String();
+        return res;
+    }
+
+    public ArrayList<String> ParseListOfString(String str) {
+        ArrayList<String> s = new ArrayList<String>();
+
         StringBuilder buff = new StringBuilder();
-        int buffId = 0;
-        String buffData = new String();
-
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == CommonData.SEP) {
-                switch(stage)
-                {
-                    case 0:         //*** Read command ID. ***
-                        operId = Integer.parseInt(buff.toString());
-                        switch (operId)
-                        {
-                            case 0: // Try to login
-                                stage = 1;
-
-                                break;
-                            case 1:
-                                break;
-                            case 2:
-                                break;
-                            case 3:
-                                break;
-                            case 4:
-                                break;
-                            case 5:
-                                break;
-                            case 6:
-                                break;
-                            case 7:
-                                break;
-                            case 8:
-                                break;
-                        }
-
-                        break;
-                    case 1:         //*** Read username. ***
-                        _userName = buff.toString();
-                        stage++;
-                        break;
-                    case 2:         // *** Read user's password. ***
-                        _pass = buff.toString();
-                        stage=0;
-                        break;
-                    case 3:         //*** Read tag id. ***
-                        _tagId = Integer.parseInt(buff.toString());
-                        stage++;
-                        break;
-                    case 4:         // *** Read tag data. ***
-                        _taggData = buff.toString();
-                        stage=0;
-                        break;
-                }
+                s.add(buff.toString());
                 buff.delete(0, buff.length());
             }
             else buff.append(str.charAt(i));
         }
 
-        /*
-
-        * */
-
-
         return s;
+    }
 
+    public ArrayList<Integer> ParseListOfInteger(String str) {
+        ArrayList<Integer> n = new ArrayList<Integer>();
+
+        StringBuilder buff = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == CommonData.SEP) {
+                n.add(Integer.parseInt(buff.toString()));
+                buff.delete(0, buff.length());
+            }
+            else buff.append(str.charAt(i));
+        }
+
+        return n;
+    }
+
+    public NotePrimitive ParseNotePrimitive(String str, int id) {
+        //NotePrimitive np = new NotePrimitive();
+
+        byte stage = 0;
+        StringBuilder buff = new StringBuilder();
+
+        LocalDateTime dtbuff = LocalDateTime.now();
+        String ss = new String();
+
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == CommonData.SEP) {
+                switch (stage) {
+                    case 0:         //*** Read creation date. ***
+                        stage++;
+                        dtbuff = LocalDateTime.parse(buff.toString());
+                        break;
+                    case 1:         //*** Read text. ***
+                        stage++;
+                        ss = buff.toString();
+                        break;
+                }
+                buff.delete(0, buff.length());
+            } else buff.append(str.charAt(i));
+        }
+
+        NotePrimitive np = new NotePrimitive(id, dtbuff, ss);
+        return np;
     }
 
 }

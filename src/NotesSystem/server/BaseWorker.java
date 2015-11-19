@@ -1,11 +1,13 @@
-package NotesSystem.main;
+package NotesSystem.server;
+
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import NotesSystem.main.*;
 
 /**
- * Created by Sasha on 08.10.2015.
+ * Created by A-13XX on 08.10.2015.
  */
 public class BaseWorker {
     private ArrayList<User> _users;
@@ -28,6 +30,13 @@ public class BaseWorker {
         _tags = new ArrayList<Tag>();
     }
 
+    /**
+     * Checking for the user's account existence;
+     * @param log - username;
+     * @param pass - user password;
+     * @return - existing user ID.
+     */
+
     public int CheckUser(String log, String pass) {
         if (_users.size() > 0) {
             for (int i = 0; i < _users.size(); i++) {
@@ -38,6 +47,11 @@ public class BaseWorker {
         }
         return -1;
     }
+
+    /**
+     * Parsing the whole database for all user accounts;
+     * @param fileName - account information database file.
+     */
 
     private void LoadUsers(String fileName) {
         StringBuilder sb = new StringBuilder();
@@ -108,6 +122,11 @@ public class BaseWorker {
             else buff.append(str.charAt(i));
         }
     }
+
+    /**
+     * Parsing the whole database for all user notes;
+     * @param fileName - note-list database file.
+     */
 
     private void LoadNotes(String fileName) {
         StringBuilder sb = new StringBuilder();
@@ -201,6 +220,11 @@ public class BaseWorker {
         }
     }
 
+    /**
+     * Parsing the whole database for all user tags;
+     * @param fileName - tag-list database file.
+     */
+
     public void LoadTags(String fileName) {
         StringBuilder sb = new StringBuilder();
         File file = new File(fileName);
@@ -250,6 +274,11 @@ public class BaseWorker {
 
     }
 
+    /**
+     * Checking for new user accounts and writing them into database;
+     * @param fileName - account information database file.
+     */
+
     private void SaveUsers(String fileName) {
         File file = new File(fileName);
         try
@@ -278,6 +307,10 @@ public class BaseWorker {
         }
     }
 
+    /**
+     * Checking for new user notes and writing them into database;
+     * @param fileName - note-list database file.
+     */
     private void SaveNotes(String fileName) {
         File file = new File(fileName);
         try
@@ -315,6 +348,10 @@ public class BaseWorker {
         }
     }
 
+    /**
+     * Checking for new user tags and writing them into database;
+     * @param fileName - tag-list database file.
+     */
     public void SaveTags(String fileName) {
         File file = new File(fileName);
         try
@@ -335,57 +372,108 @@ public class BaseWorker {
         }
     }
 
+    /**
+     * Saving the whole bunch of data into separated database files.
+     */
     public void SaveData() {
         SaveNotes(path_3);
         SaveUsers(path_2);
         SaveTags(path_1);
     }
 
+    /**
+     * Checking whether the user account ID is a natural number,
+     * and it is less than the number of accounts in the list;
+     * @param id - user account ID;
+     * @return - true in case of verification.
+     */
     private boolean VerifyUserId(int id) {
         if (id<_users.size() && id>0)
             return true;
         return false;
     }
 
+    /**
+     * Checking whether the tag ID is a natural number,
+     * and it is less than the number of tags in the list;
+     * @param id - tag ID;
+     * @return - true in case of verification.
+     */
     private boolean VerifyTagId(int id)    {
         if (id<_tags.size() && id>0)
             return true;
         return false;
     }
 
+    /**
+     * Checking whether the user note ID is a natural number,
+     * and it is less than the number of notes in the list;
+     * @param id - user note ID;
+     * @return - true in case of verification.
+     */
     private boolean VerifyNoteId(int id)    {
         if (id<_notes.size() && id>0)
             return true;
         return false;
     }
 
+    /**
+     * Setting the note title;
+     * @param id - ID of the note;
+     * @param data - Title name.
+     */
     public void SetNoteCaption(int id, String data) {
         if (VerifyNoteId(id)) {
             _notes.get(id).SetTitle(data);
         }
     }
 
+    /**
+     * Hashing the tag-list to the note by note ID;
+     * @param id - ID of the note;
+     * @param t - list of tags.
+     */
     public void SetNoteTags(int id, ArrayList<Integer> t) {
         if (VerifyNoteId(id)) {
             _notes.get(id).SetTags(t);
         }
     }
 
+    /**
+     * Removing the note's last version;
+     * @param id - ID of the note;
+     * @param ver - version of tha note.
+     */
     public void RemoveNoteVer(int id, int ver) {
         if (VerifyNoteId(id))
             _notes.get(id).DelVersion(ver);
     }
 
+    /**
+     * Setting the username of the user by user ID;
+     * @param id - ID of the user;
+     * @param data - username.
+     */
     public void SetUserName(int id, String data) {
         if (VerifyUserId(id))
             _users.get(id).SetLogin(data);
     }
 
+    /**
+     * Setting the password of the user by user ID;
+     * @param id - ID of the user;
+     * @param data - password.
+     */
     public void SetUserPass(int id, String data) {
         if (VerifyUserId(id))
             _users.get(id).SetPass(data);
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public int GetTagByName(String name) {
         int res = -1;
         if (_tags.size()>0)
@@ -396,6 +484,10 @@ public class BaseWorker {
         return res;
     }
 
+    /**
+     *
+     * @param t
+     */
     public void AddTag(String t) {
         if (GetTagByName(t) >= 0) {
             int m = 0;
@@ -422,6 +514,13 @@ public class BaseWorker {
         }*/
     }
 
+    /**
+     *
+     * @param userId
+     * @param _tags
+     * @param _data
+     * @param title
+     */
     public void AddNote(int userId, ArrayList<Integer> _tags, String _data, String title) {
         if (VerifyUserId(userId)) {
             int m = 0;
@@ -465,6 +564,11 @@ public class BaseWorker {
         }*/
     }
 
+    /**
+     *
+     * @param _log
+     * @param _pass
+     */
     public void AddUser(String _log, String _pass) {
         if (CheckUser(_log, _pass) >= 0) {
             int m = 0;
@@ -495,6 +599,10 @@ public class BaseWorker {
         }*/
     }
 
+    /**
+     *
+     * @param userId
+     */
     public void DeleteUser(int userId) {
         if (VerifyUserId(userId)) {
             //Remove notes
@@ -516,12 +624,19 @@ public class BaseWorker {
 
     }
 
+    /**
+     *
+     */
     public void Initialise() {
         LoadNotes(path_3);
         LoadUsers(path_2);
         LoadTags(path_1);
     }
 
+    /**
+     *
+     * @param id
+     */
     public void DeleteTagById(int id) {
         if (VerifyTagId(id)) {
             if (_tags.size() > 0)
@@ -531,6 +646,10 @@ public class BaseWorker {
         }
     }
 
+    /**
+     *
+     * @param name
+     */
     public void DeleteTagByName(String name) {
         if (_tags.size() > 0)
             for (int i = 0; i < _tags.size(); i++)
@@ -538,6 +657,11 @@ public class BaseWorker {
                     _tags.remove(i);
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     public int GetNotesCountByUser(int userId) {
         int res = 0;
         if (_users.size() > 0)
@@ -550,6 +674,11 @@ public class BaseWorker {
         return res;
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     public ArrayList<String> GetNotesTitles(int userId) {
         ArrayList<String> res = new ArrayList<String>();
         if (_users.size() > 0) {
@@ -567,6 +696,11 @@ public class BaseWorker {
         return res;
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     public ArrayList<Integer> GetNotesByUserId(int userId) {
         ArrayList<Integer> res = new ArrayList<Integer>();
         if (_users.size() > 0) {
@@ -579,6 +713,13 @@ public class BaseWorker {
         return res;
     }
 
+    /**
+     * Getting the version of the given note by it's ID.
+     * @param userId - ID of the logged user;
+     * @param noteId - ID of the note in the global note-list;
+     * @param verId - ID of the version of sought-for note;
+     * @return - the current note version string.
+     */
     public String GetNoteVerById(int userId, int noteId, int verId) {
         String res = new String();
         ArrayList<Integer> n = new ArrayList<Integer>();
@@ -605,6 +746,13 @@ public class BaseWorker {
         return res;
     }
 
+    /**
+     * Getting the date of creation of the given note by it's ID.
+     * @param userId - ID of the logged user;
+     * @param noteId - ID of the note in the global note-list;
+     * @param verId - ID of the version of sought-for note;
+     * @return - date of creation (in LocalDateTime format).
+     */
     public String GetNoteVerDateById(int userId, int noteId, int verId) {
         String res = new String(LocalDateTime.now().toString());
         ArrayList<Integer> n = new ArrayList<Integer>();

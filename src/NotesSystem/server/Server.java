@@ -1,4 +1,7 @@
-package NotesSystem.main;
+package NotesSystem.server;
+
+import NotesSystem.main.CommonData;
+import NotesSystem.main.RequestsParser;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,10 +12,9 @@ import java.net.Socket;
 public class Server extends Thread{
     //private int _port;
     private Socket _socket;
-    BufferedReader _in;
-    // Вывод автоматически выталкивается из буфера PrintWriter'ом
-    PrintWriter _out;
-    RequestsParser _parser = new RequestsParser();
+    private BufferedReader _in;
+    private PrintWriter _out;
+    private RequestsParser _parser;
 
     private void createNewUser() {
 
@@ -24,10 +26,10 @@ public class Server extends Thread{
 
     Server(Socket s) {
         _socket = s;
+        _parser = new RequestsParser();
         _parser.SetUserId(-1);
         try {
             _in = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
-            // Вывод автоматически выталкивается из буфера PrintWriter'ом
             _out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(_socket.getOutputStream())), true);
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,9 +46,15 @@ public class Server extends Thread{
                     break;
 
                 //Parsing
-                _out.println(_parser.Parse(str));
+                if (str.length()>0)
+                    _out.println(_parser.Parse(str));
+
+                try {
+                    this.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            // Всегда закрываем два сокета...
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
