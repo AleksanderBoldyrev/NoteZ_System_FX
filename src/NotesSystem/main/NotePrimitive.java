@@ -51,7 +51,7 @@ public class NotePrimitive {
         _data = new String(arr);
     }
 
-    public void delSubstr(int beg, int end) {
+    public void DelSubstr(int beg, int end) {
         int swapper = (beg > end) ? beg : end;
         beg = (beg > end) ? end : beg;
         end = swapper;

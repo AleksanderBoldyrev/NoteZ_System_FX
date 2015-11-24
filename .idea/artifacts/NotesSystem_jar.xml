@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="NotesSystem:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/NotesSystem_jar</output-path>
+    <root id="archive" name="NotesSystem.jar">
+      <element id="module-output" name="NotesSystem" />
+      <element id="extracted-dir" path="F:/qtjambi-community-4.8.7-win64-msvc2013/qtjambi-4.8.7.jar" path-in-jar="/" />
+      <element id="library" level="project" name="qtjambi-src" />
+    </root>
+  </artifact>
+</component>

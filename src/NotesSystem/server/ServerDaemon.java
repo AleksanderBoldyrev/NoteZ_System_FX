@@ -14,7 +14,7 @@ public class ServerDaemon extends Thread{
     private ArrayList<Server> _serverThreads;
     private int _port;
     private ServerSocket _ssocket;
-    //public final static SecurityHelper clSH = new SecurityHelper();
+    public final static SecurityHelper sHelper = new SecurityHelper();
 
     ServerDaemon(int port) {
         _serverThreads = new ArrayList<Server>();

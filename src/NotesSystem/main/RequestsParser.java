@@ -11,26 +11,47 @@ import java.util.ArrayList;
 public class RequestsParser {
 
 
-   /* public String Build(Tag t) {
-        String res = new String();
-        return res;
-    }
+   /*public String Build(Tag t) {
+       String res = new String();
+       res += oId;
+       res += CommonData.SEP;
+       for (int i = 0; i < ar.size(); i++) {
+           res += ar.get(i);
+           res += CommonData.SEP;
+       }
+   }
 
     public String Build(User u) {
         String res = new String();
-        return res;
+        res += oId;
+        res += CommonData.SEP;
+        for (int i = 0; i < ar.size(); i++) {
+            res += ar.get(i);
+            res += CommonData.SEP;
+        }
     }
 
     public String Build(Note n) {
         String res = new String();
-        return res;
+        res += oId;
+        res += CommonData.SEP;
+        for (int i = 0; i < ar.size(); i++) {
+            res += ar.get(i);
+            res += CommonData.SEP;
+        }
     }
+
     public String Build(NotePrimitive np) {
         String res = new String();
-        return res;
+        res += oId;
+        res += CommonData.SEP;
+        for (int i = 0; i < ar.size(); i++) {
+            res += ar.get(i);
+            res += CommonData.SEP;
+        }
     }*/
 
-    public String Build(ArrayList ar, int oId) {
+    public String Build(ArrayList<String> ar, int oId) {
         String res = new String();
         res+=oId;
         res+=CommonData.SEP;
@@ -42,12 +63,23 @@ public class RequestsParser {
         return res;
     }
 
-    /*public String Build(int oId, ArrayList<Integer> ar) {
+    public String Build(int oId, ArrayList<Integer> ar) {
+        String res = new String();
+        res+=oId;
+        res+=CommonData.SEPID;
+        for (int i=0; i<ar.size(); i++){
+            res+=ar.get(i);
+            res+=CommonData.SEPID;
+        }
+        return res;
+    }
+
+    public String Build(String buff, int oId) {
         String res = new String();
         return res;
-    }*/
+    }
 
-    public String Build(NotePrimitive np, int oId) {
+    public String Build(int buff, int oId) {
         String res = new String();
         return res;
     }

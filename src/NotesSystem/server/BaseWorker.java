@@ -8,6 +8,9 @@ import NotesSystem.main.*;
 
 /**
  * Created by A-13XX on 08.10.2015.
+ *
+ * Class used to process all the data from our database to the server,
+ * in order to parse the structure of data given in DB.
  */
 public class BaseWorker {
     private ArrayList<User> _users;
@@ -46,6 +49,16 @@ public class BaseWorker {
             }
         }
         return -1;
+    }
+
+    public boolean DoesUserExist(String log) {
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetName().equals(log))
+                    return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -470,9 +483,9 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Getting the tag by it's title.
+     * @param name - tag's title;
+     * @return - tag's ID.
      */
     public int GetTagByName(String name) {
         int res = -1;
@@ -485,8 +498,8 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param t
+     * Adds tag in the common base;
+     * @param t - tag's title.
      */
     public void AddTag(String t) {
         if (GetTagByName(t) >= 0) {
@@ -515,11 +528,11 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param userId
-     * @param _tags
-     * @param _data
-     * @param title
+     * Adds note to the user's account base;
+     * @param userId - user account ID;
+     * @param _tags - tags bound with future note;
+     * @param _data - consistence of the note;
+     * @param title - note's title.
      */
     public void AddNote(int userId, ArrayList<Integer> _tags, String _data, String title) {
         if (VerifyUserId(userId)) {
@@ -565,9 +578,9 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param _log
-     * @param _pass
+     * Adds user account to the base;
+     * @param _log - username;
+     * @param _pass - user's password.
      */
     public void AddUser(String _log, String _pass) {
         if (CheckUser(_log, _pass) >= 0) {
@@ -600,8 +613,8 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param userId
+     * Deleting user account by it's ID;
+     * @param userId - user account ID.
      */
     public void DeleteUser(int userId) {
         if (VerifyUserId(userId)) {
@@ -616,16 +629,8 @@ public class BaseWorker {
         }
     }
 
-    public void CreateBackup() {
-
-    }
-
-    public void GetFromBackup() {
-
-    }
-
     /**
-     *
+     * Initialising the process of loading the whole bunch of data from base.
      */
     public void Initialise() {
         LoadNotes(path_3);
@@ -634,8 +639,8 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param id
+     * Deleting the tag by it's ID;
+     * @param id - tag's ID.
      */
     public void DeleteTagById(int id) {
         if (VerifyTagId(id)) {
@@ -647,8 +652,8 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param name
+     * Deleting the tag by it's title;
+     * @param name - tag's title.
      */
     public void DeleteTagByName(String name) {
         if (_tags.size() > 0)
@@ -658,9 +663,9 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param userId
-     * @return
+     * Getting the number of existing notes in database belonging to the exact user;
+     * @param userId - user account ID;
+     * @return - sought-for count.
      */
     public int GetNotesCountByUser(int userId) {
         int res = 0;
@@ -675,9 +680,9 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param userId
-     * @return
+     * Getting the whole list of note's titles belonging to the exact user;
+     * @param userId - user account ID;
+     * @return - list of note's titles for our user.
      */
     public ArrayList<String> GetNotesTitles(int userId) {
         ArrayList<String> res = new ArrayList<String>();
@@ -697,9 +702,9 @@ public class BaseWorker {
     }
 
     /**
-     *
-     * @param userId
-     * @return
+     * Getting the whole list of notes ID belonging to the exact user;
+     * @param userId - user account ID;
+     * @return - list of notes for our user.
      */
     public ArrayList<Integer> GetNotesByUserId(int userId) {
         ArrayList<Integer> res = new ArrayList<Integer>();
@@ -781,6 +786,16 @@ public class BaseWorker {
         return res;
     }
 
+    public int GetNotePosById (int userId, int id) {
+        if (_notes.size()>0)
+            for (int i=0; i< _notes.size(); i++)
+            {
+                if (_notes.get(i).GetId()==id)
+                    return i;
+            }
+        return 0;
+    }
+
     public void DeleteUnusedTags() {
         /**
          * TODO
@@ -791,5 +806,24 @@ public class BaseWorker {
         /**
          * TODO
          */
+    }
+
+    public void CreateBackup() {
+
+    }
+
+    public void GetFromBackup() {
+
+    }
+
+    public int GetNoteVersCount(int userId, int noteId) {
+        if (_users.size() > 0) {
+            for (int i = 0; i < _users.size(); i++) {
+                if (_users.get(i).GetId() == userId) {
+                    return _notes.get(GetNotePosById(userId, noteId)).GetVersionsCount();
+                }
+            }
+        }
+        return 0;
     }
 }
