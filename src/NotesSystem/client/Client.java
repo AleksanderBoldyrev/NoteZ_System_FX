@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import NotesSystem.main.*;
 import com.trolltech.qt.QSignalEmitter;
 import com.trolltech.qt.QtBlockedSlot;
+import com.trolltech.qt.core.QObject;
 
 import static java.lang.Thread.sleep;
 
 /**
  * Created by Sasha on 30.09.2015.
  */
-public class Client extends QSignalEmitter {
+public class Client {
     private SocketListener _listener;
     private Ui_MainWindow _uiMain;
     private Ui_LoginWindow _uiLogin;
@@ -34,6 +35,8 @@ public class Client extends QSignalEmitter {
         _uiLogin.pushButton_2.clicked.connect(this, "Login()");
         /**/
     }
+
+
 
     public void startProcess() {
         Thread t = new Thread(_listener);
