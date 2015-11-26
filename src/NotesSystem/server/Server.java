@@ -154,14 +154,31 @@ public class Server extends Thread{
         return _parser.Build(res, CommonData.O_RESPOND);
     }
 
-    public String CreateNote(ArrayList<String> buff ) {
-        String res = new String();
-        return res;
+    public String DeleteUser(ArrayList<String> buff ) {
+        ArrayList<String> res = new ArrayList<String>();
+        boolean suc = false;
+        if (buff.size()>2) {
+            suc = ServerDaemon.sHelper.DeleteUser(buff.get(1));
+        }
+        if (suc)
+            res.add(new String(CommonData.SERV_YES + ""));
+        else
+            res.add(new String(CommonData.SERV_NO + ""));
+        return _parser.Build(res, CommonData.O_RESPOND);
     }
 
-    public String DeleteUser(ArrayList<String> buff ) {
-        String res = new String();
-        return res;
+    public String CreateNote(ArrayList<String> buff ) {   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        ArrayList<String> res = new ArrayList<String>();
+        boolean suc = false;
+        ArrayList<Integer> ar = new ArrayList<Integer>();
+        if (buff.size()>3) {
+            suc = ServerDaemon.sHelper.CreateNote(0, ar, buff.get(3), buff.get(4));
+        }
+        if (suc)
+            res.add(new String(CommonData.SERV_YES + ""));
+        else
+            res.add(new String(CommonData.SERV_NO + ""));
+        return _parser.Build(res, CommonData.O_RESPOND);
     }
 
     public String DeleteNote(ArrayList<String> buff ) {
@@ -188,7 +205,7 @@ public class Server extends Thread{
         String res = new String();
         return res;
     }
-    public String CreateRequest(ArrayList<String> buff ) {
+    /*public String CreateRequest(ArrayList<String> buff ) {
         String res = new String();
         return res;
     }
@@ -201,7 +218,7 @@ public class Server extends Thread{
     public String DeleteRequest(ArrayList<String> buff ) {
         String res = new String();
         return res;
-    }
+    }*/
 
     public String CreateTag(ArrayList<String> buff ) {
         String res = new String();

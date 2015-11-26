@@ -90,7 +90,7 @@ public class SecurityHelper {
     }
 
     public synchronized void CreateNote(int userId, ArrayList<Integer> tagList, String data, String title) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        _dataBase.AddNote(userId, tagList, data, title);
+        if (_activeUsers.contains(userId)) if (/*belongs to user?*/) _dataBase.AddNote(userId, tagList, data, title);
     }
 
     public synchronized void DeleteNote(int noteId, int userId) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

@@ -630,6 +630,23 @@ public class BaseWorker {
     }
 
     /**
+     * Deleting a note by user ID;
+     * @param userId - user account ID.
+     */
+    public void DeleteNote(int noteId,int userId) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if (VerifyUserId(userId)) {
+            //Remove notes
+            if (_users.get(userId).GetNotesCount()>0) {
+                ArrayList<Integer> un = _users.get(userId).GetNotes();
+                for (int j = 0; j < _notes.size(); j++) {
+                    if (un.get(j).equals(noteId))
+                        _notes.remove(j);
+                }
+            }
+        }
+    }
+
+    /**
      * Initialising the process of loading the whole bunch of data from base.
      */
     public void Initialise() {
