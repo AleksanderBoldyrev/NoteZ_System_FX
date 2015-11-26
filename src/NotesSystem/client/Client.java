@@ -313,7 +313,7 @@ public class Client {
 
     }
 
-    public void GetNoteByTag() {
+    public void GetNoteByTag() { //
 
     }
     /*private String GetData(String s) {
