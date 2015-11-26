@@ -89,12 +89,12 @@ public class SecurityHelper {
         return res;
     }
 
-    public synchronized void WriteNote() {
-
+    public synchronized void CreateNote(int userId, ArrayList<Integer> tagList, String data, String title) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        _dataBase.AddNote(userId, tagList, data, title);
     }
 
-    public synchronized void DeleteNote() {
-
+    public synchronized void DeleteNote(int noteId, int userId) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        _dataBase.DeleteNote(noteId, userId);
     }
 
     public synchronized void GetUserNoteHeaderList() {
@@ -112,11 +112,11 @@ public class SecurityHelper {
         _dataBase.DeleteUser(userId);
     }
 
-    public synchronized void ChangeUser() {
-
+    public void AddTagToNote(String t) {
+        _dataBase.AddTag(t);
     }
 
-    public void AddTagToNote() {
+    public synchronized void ChangeUser() {
 
     }
 
