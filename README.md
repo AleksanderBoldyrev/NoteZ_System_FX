@@ -1,4 +1,4 @@
-## A1-3XX NoteZ qualification project
+## A-13XX NoteZ qualification project
 
 NoteZ is a web interface application providing user with a couple of features It has expressive, elegant Java syntax. This app provides you the ability of creating your own database of notes, where you can keep all your JIT-thoughts ;)
 
